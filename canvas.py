@@ -6,15 +6,15 @@ canvas = Canvas(API_URL, API_KEY)
 user = canvas.get_user(SIS_ID, ID_TYPE)
 
 user_id = user.id
+
 all_courses = user.get_courses()
+
 for c in all_courses:
     try:
-        if c.access_restricted_by_date == True:
-            # old course
+        if c.access_restricted_by_date == True: # old course
             pass
     except AttributeError:
         if c.enrollments[0]['type'] == 'student':
-            print(c.id)
             course_id = c.id
             course_name = c.name
             assignments = c.get_assignments()
@@ -24,8 +24,7 @@ for c in all_courses:
                 group_id = group.id
                 group_name = group.name
                 group_weight = group.group_weight                
-                print("{}: {}%".format(group_name, group_weight))
-
+                print("{}: {}%".format(group_name.upper(), group_weight))
                 for assignment in assignments:
                     if(assignment.assignment_group_id == group.id):
                         assignment_id = assignment.id
@@ -42,9 +41,6 @@ for c in all_courses:
                             pass
                         elif submission_status == 'pending_review':
                             pass
-
-
-
                         print("{} ({}/{})".format(assignment_name, submission_score, assignment_points))
                 print()
             print()
